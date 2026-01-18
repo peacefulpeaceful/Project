@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 public class Parcel {
     private int id;
-    private String trackingNumber;
     private double weight;
     private ParcelStatus status;
     private Client sender;
@@ -19,13 +18,8 @@ public class Parcel {
         this.createdAt = LocalDateTime.now();
     }
 
-
     public int getId() {
         return id;
-    }
-
-    public String getTrackingNumber() {
-        return trackingNumber;
     }
 
     public double getWeight() {
@@ -60,10 +54,6 @@ public class Parcel {
         this.id = id;
     }
 
-    public void setTrackingNumber(String trackingNumber) {
-        this.trackingNumber = trackingNumber;
-    }
-
     public void setWeight(double weight) {
         this.weight = weight;
     }
@@ -95,7 +85,6 @@ public class Parcel {
     @Override
     public String toString() {
         return "Parcel{id=" + id +
-                ", trackingNumber='" + trackingNumber + "'" +
                 ", weight=" + weight +
                 ", status=" + status +
                 ", cost=" + cost +

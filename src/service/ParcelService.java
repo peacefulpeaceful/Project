@@ -6,7 +6,6 @@ import model.ParcelStatus;
 import repository.ParcelRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ParcelService {
 
@@ -30,8 +29,6 @@ public class ParcelService {
 
         parcel.setStatus(ParcelStatus.CREATED);
 
-
-        parcel.setTrackingNumber("PO" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
 
 
         repo.save(parcel);

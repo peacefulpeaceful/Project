@@ -13,7 +13,7 @@ public class MyApplication {
 
     private void mainMenu() {
         System.out.println();
-        System.out.println("=== POST OFFICE APP ===");
+        System.out.println("Welcome to my post office app");
         System.out.println("1. Create package");
         System.out.println("2. Show all packages");
         System.out.println("3. Change status");

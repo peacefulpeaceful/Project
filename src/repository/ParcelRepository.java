@@ -42,7 +42,7 @@ public class ParcelRepository {
 
             st.executeUpdate();
 
-            // get generated id
+
             try (ResultSet keys = st.getGeneratedKeys()) {
                 if (keys.next()) {
                     p.setId(keys.getInt(1));
@@ -131,8 +131,6 @@ public class ParcelRepository {
         p.setSender(sender);
         p.setRecipient(receiver);
 
-
-        p.setTrackingNumber("N/A");
 
         return p;
     }
