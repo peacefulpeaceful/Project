@@ -20,12 +20,17 @@ public class ParcelService {
         if (weight <= 0) {
             throw new IllegalArgumentException("Weight must be > 0");
         }
+        if (weight > 30){
+            throw new IllegalArgumentException("Wight need to be not more than 30kg PLS)");
+        }
+
 
         Parcel parcel = new Parcel();
         parcel.setWeight(weight);
         parcel.setSender(sender);
         parcel.setRecipient(recipient);
-
+        double cost = calculateCost(weight);
+        parcel.setCost(cost);
 
         parcel.setStatus(ParcelStatus.CREATED);
 
@@ -58,5 +63,13 @@ public class ParcelService {
     private boolean isValidStatusChange(ParcelStatus current, ParcelStatus next) {
         return (current == ParcelStatus.CREATED && next == ParcelStatus.IN_TRANSIT)
                 || (current == ParcelStatus.IN_TRANSIT && next == ParcelStatus.DELIVERED);
+    }
+    public double calculateCost(double weight){
+        if (weight <= 10){
+            return 2700;
+        } else {
+            return 2700 + ((weight / 10) * 777);
+
+        }
     }
 }

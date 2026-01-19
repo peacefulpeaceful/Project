@@ -22,23 +22,24 @@ public class ParcelRepository {
 
 
     public void save(Parcel p) {
-        String sql = "INSERT INTO posilka(type, weight, sender_name, sender_surname, sender_adress, receiver_name, receiver_adress, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO posilka(type, weight,cost, sender_name, sender_surname, sender_adress, receiver_name, receiver_adress, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             st.setString(1, "REGULAR");
             st.setDouble(2, p.getWeight());
+            st.setDouble(3, p.getCost());
 
-            st.setString(3, p.getSender().getName());
-            st.setString(4, p.getSender().getSurname());
-            st.setString(5, p.getSender().getAddress());
+            st.setString(4, p.getSender().getName());
+            st.setString(5, p.getSender().getSurname());
+            st.setString(6, p.getSender().getAddress());
 
-            st.setString(6, p.getRecipient().getName());
-            st.setString(7, p.getRecipient().getAddress());
+            st.setString(7, p.getRecipient().getName());
+            st.setString(8, p.getRecipient().getAddress());
 
-            st.setString(8, p.getStatus().name());
+            st.setString(9, p.getStatus().name());
 
             st.executeUpdate();
 
@@ -117,6 +118,7 @@ public class ParcelRepository {
         Parcel p = new Parcel();
         p.setId(rs.getInt("id"));
         p.setWeight(rs.getDouble("weight"));
+        p.setCost(rs.getDouble("cost"));
         p.setStatus(ParcelStatus.valueOf(rs.getString("status")));
 
         Client sender = new Client();

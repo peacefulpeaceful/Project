@@ -1,6 +1,5 @@
 package model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Parcel {
@@ -9,9 +8,9 @@ public class Parcel {
     private ParcelStatus status;
     private Client sender;
     private Client recipient;
-    private BigDecimal cost;
     private LocalDateTime createdAt;
     private LocalDateTime deliveredAt;
+    private double cost;
 
 
     public Parcel() {
@@ -36,10 +35,6 @@ public class Parcel {
 
     public Client getRecipient() {
         return recipient;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -70,16 +65,18 @@ public class Parcel {
         this.recipient = recipient;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
     public void setDeliveredAt(LocalDateTime deliveredAt) {
         this.deliveredAt = deliveredAt;
+    }
+    public double getCost(){
+        return cost;
+    }
+    public void setCost(double cost){
+        this.cost = cost;
     }
 
     @Override
