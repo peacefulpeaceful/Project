@@ -9,12 +9,10 @@ public class Parcel {
     private Client sender;
     private Client recipient;
     private LocalDateTime createdAt;
-    private LocalDateTime deliveredAt;
     private double cost;
 
 
-    public Parcel() {
-        this.createdAt = LocalDateTime.now();
+    public Parcel() {;
     }
 
     public int getId() {
@@ -37,13 +35,6 @@ public class Parcel {
         return recipient;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getDeliveredAt() {
-        return deliveredAt;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -65,18 +56,17 @@ public class Parcel {
         this.recipient = recipient;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setDeliveredAt(LocalDateTime deliveredAt) {
-        this.deliveredAt = deliveredAt;
-    }
     public double getCost(){
         return cost;
     }
     public void setCost(double cost){
         this.cost = cost;
+    }
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt){
+        this.createdAt = createdAt;
     }
 
     @Override

@@ -47,7 +47,7 @@ public class MyApplication {
     }
 
     private void createParcelMenu() {
-        System.out.println("Enter weight:");
+        System.out.println("Enter weight(kg):");
         double weight = scanner.nextDouble();
 
         System.out.println("Sender name:");

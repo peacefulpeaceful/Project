@@ -51,7 +51,7 @@ public class ParcelRepository {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("DB error (save): " + e.getMessage());
+            throw new RuntimeException("DB error: " + e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class ParcelRepository {
             return parcels;
 
         } catch (Exception e) {
-            throw new RuntimeException("DB error (getAll): " + e.getMessage());
+            throw new RuntimeException("DB error: " + e.getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ public class ParcelRepository {
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("DB error (getById): " + e.getMessage());
+            throw new RuntimeException("DB error: " + e.getMessage());
         }
     }
 
@@ -109,7 +109,7 @@ public class ParcelRepository {
             st.executeUpdate();
 
         } catch (Exception e) {
-            throw new RuntimeException("DB error (updateStatus): " + e.getMessage());
+            throw new RuntimeException("DB error: " + e.getMessage());
         }
     }
 
@@ -120,6 +120,7 @@ public class ParcelRepository {
         p.setWeight(rs.getDouble("weight"));
         p.setCost(rs.getDouble("cost"));
         p.setStatus(ParcelStatus.valueOf(rs.getString("status")));
+        p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 
         Client sender = new Client();
         sender.setName(rs.getString("sender_name"));
