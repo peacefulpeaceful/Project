@@ -5,11 +5,12 @@ import data.PostgresDB;
 import repository.ParcelRepository;
 import service.ParcelService;
 
+
 public class Main {
     public static void main(String[] args) {
 
         IDB db = new PostgresDB(
-                "jdbc:postgresql://localhost:5432/notsomedb",
+                "jdbc:postgresql://localhost:5432/DefinitelyNOTsomedb",
                 "postgres",
                 "0000"
         );
