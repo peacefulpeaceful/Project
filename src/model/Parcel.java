@@ -62,9 +62,11 @@ public class Parcel {
     public void setCost(double cost){
         this.cost = cost;
     }
+
     public LocalDateTime getCreatedAt(){
         return createdAt;
     }
+
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
     }

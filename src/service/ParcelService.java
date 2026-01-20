@@ -21,7 +21,7 @@ public class ParcelService {
             throw new IllegalArgumentException("Weight must be > 0");
         }
         if (weight > 30){
-            throw new IllegalArgumentException("Wight need to be not more than 30kg PLS)");
+            throw new IllegalArgumentException("Weight need to be no more than 30kg");
         }
 
 
