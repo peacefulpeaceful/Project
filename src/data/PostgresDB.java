@@ -11,7 +11,7 @@ public class PostgresDB implements IDB {
     public PostgresDB(String url, String user, String password) {
         this.url = url;
         this.user = user;
-        this.password = password;
+        this.password = password; 
     }
 
     @Override

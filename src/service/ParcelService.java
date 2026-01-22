@@ -68,7 +68,7 @@ public class ParcelService {
         if (weight <= 10){
             return 2700;
         } else {
-            return 2700 + ((weight / 10) * 777);
+            return 2700 + ((weight % 10) * 777);
 
         }
     }

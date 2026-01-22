@@ -20,7 +20,6 @@ public class ParcelRepository {
         this.db = db;
     }
 
-
     public void save(Parcel p) {
         String sql = "INSERT INTO posilka(type, weight,cost, sender_name, sender_surname, sender_adress, receiver_name, receiver_adress, status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
