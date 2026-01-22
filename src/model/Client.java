@@ -7,17 +7,7 @@ public class Client {
     private String address;
 
 
-    public Client() {}
-
-    public Client(String name, String surname, String address) {
-        this.name = name;
-        this.surname = surname;
-        this.address = address;
-    }
-
-    public int getId() {
-        return id;
-    }
+    public Client(){}
 
     public String getName() {
         return name;
@@ -29,10 +19,6 @@ public class Client {
 
     public String getAddress() {
         return address;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setName(String name) {
