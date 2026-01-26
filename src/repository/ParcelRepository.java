@@ -12,14 +12,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParcelRepository {
+public class ParcelRepository implements IParcelRepository{
 
     private final IDB db;
 
     public ParcelRepository(IDB db) {
         this.db = db;
     }
-
+    @Override
     public void save(Parcel p) {
         String sql = "INSERT INTO posilka(type, weight,cost, sender_name, sender_surname, sender_adress, receiver_name, receiver_adress, status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -54,7 +54,7 @@ public class ParcelRepository {
         }
     }
 
-
+    @Override
     public List<Parcel> getAll() {
         List<Parcel> parcels = new ArrayList<>();
         String sql = "SELECT * FROM posilka ORDER BY id";
@@ -74,7 +74,7 @@ public class ParcelRepository {
         }
     }
 
-
+    @Override
     public Parcel getById(int id) {
         String sql = "SELECT * FROM posilka WHERE id = ?";
 
@@ -96,7 +96,7 @@ public class ParcelRepository {
         }
     }
 
-
+    @Override
     public void updateStatus(int id, ParcelStatus status) {
         String sql = "UPDATE posilka SET status = ? WHERE id = ?";
 

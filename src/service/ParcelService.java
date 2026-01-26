@@ -7,7 +7,7 @@ import repository.ParcelRepository;
 
 import java.util.List;
 
-public class ParcelService {
+public class ParcelService implements IParcelSerice{
 
     private final ParcelRepository repo;
 
@@ -15,7 +15,7 @@ public class ParcelService {
         this.repo = repo;
     }
 
-
+    @Override
     public Parcel createParcel(double weight, Client sender, Client recipient) {
         if (weight <= 0) {
             throw new IllegalArgumentException("Weight must be > 0");
@@ -40,11 +40,13 @@ public class ParcelService {
 
         return parcel;
     }
-
+    @Override
     public List<Parcel> getAllParcels() {
         return repo.getAll();
     }
 
+
+    @Override
     public void changeStatus(int parcelId, ParcelStatus newStatus) {
         Parcel existing = repo.getById(parcelId);
         if (existing == null) {
@@ -68,7 +70,7 @@ public class ParcelService {
         if (weight <= 10){
             return 2700;
         } else {
-            return 2700 + ((weight % 10) * 777);
+            return 2700 + ((weight / 10) * 777);
 
         }
     }
