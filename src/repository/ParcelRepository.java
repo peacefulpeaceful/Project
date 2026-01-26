@@ -20,25 +20,20 @@ public class ParcelRepository implements IParcelRepository{
         this.db = db;
     }
     @Override
-    public void save(Parcel p) {
-        String sql = "INSERT INTO posilka(type, weight,cost, sender_name, sender_surname, sender_adress, receiver_name, receiver_adress, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void save(Parcel p, int senderId, int receiverId) {
+        String sql = "INSERT INTO posilka(type, weight,cost, sender_id, receiver_id, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            st.setString(1, "REGULAR");
+            st.setString(1, p.getCategory().name());
             st.setDouble(2, p.getWeight());
             st.setDouble(3, p.getCost());
 
-            st.setString(4, p.getSender().getName());
-            st.setString(5, p.getSender().getSurname());
-            st.setString(6, p.getSender().getAddress());
-
-            st.setString(7, p.getRecipient().getName());
-            st.setString(8, p.getRecipient().getAddress());
-
-            st.setString(9, p.getStatus().name());
+            st.setInt(4, senderId);
+            st.setInt(5, receiverId);
+            st.setString(6, p.getStatus().name());
 
             st.executeUpdate();
 
@@ -57,7 +52,13 @@ public class ParcelRepository implements IParcelRepository{
     @Override
     public List<Parcel> getAll() {
         List<Parcel> parcels = new ArrayList<>();
-        String sql = "SELECT * FROM posilka ORDER BY id";
+        String sql =  "SELECT p.id, p.type, p.weight, p.cost, p.status, p.created_at, " +
+                        "       s.id AS sender_id, s.name AS sender_name, s.surname AS sender_surname, s.adress AS sender_address, " +
+                        "       r.id AS receiver_id, r.name AS receiver_name, r.surname AS receiver_surname, r.adress AS receiver_address " +
+                        "FROM posilka p " +
+                        "JOIN client s ON p.sender_id = s.id " +
+                        "JOIN client r ON p.receiver_id = r.id " +
+                        "ORDER BY p.id";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql);
@@ -115,6 +116,7 @@ public class ParcelRepository implements IParcelRepository{
 
     private Parcel mapRow(ResultSet rs) throws Exception {
         Parcel p = new Parcel();
+
         p.setId(rs.getInt("id"));
         p.setWeight(rs.getDouble("weight"));
         p.setCost(rs.getDouble("cost"));
@@ -128,6 +130,7 @@ public class ParcelRepository implements IParcelRepository{
 
         Client receiver = new Client();
         receiver.setName(rs.getString("receiver_name"));
+        receiver.setSurname(rs.getString("receiver_surname"));
         receiver.setAddress(rs.getString("receiver_adress"));
 
         p.setSender(sender);

@@ -3,6 +3,7 @@ package service;
 import model.Parcel;
 import model.Client;
 import model.ParcelStatus;
+import repository.ClientRepository;
 import repository.ParcelRepository;
 
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public class ParcelService implements IParcelSerice{
 
     private final ParcelRepository repo;
+    private final ClientRepository clientRepo;
 
-    public ParcelService(ParcelRepository repo) {
+    public ParcelService(ParcelRepository repo, ClientRepository clientRepo) {
         this.repo = repo;
+        this.clientRepo = clientRepo;
     }
 
     @Override
@@ -24,6 +27,8 @@ public class ParcelService implements IParcelSerice{
             throw new IllegalArgumentException("Weight need to be no more than 30kg");
         }
 
+        int senderId = clientRepo.save(sender);
+        int receiverId = clientRepo.save(recipient);
 
         Parcel parcel = new Parcel();
         parcel.setWeight(weight);
@@ -36,7 +41,7 @@ public class ParcelService implements IParcelSerice{
 
 
 
-        repo.save(parcel);
+        repo.save(parcel, senderId, receiverId);
 
         return parcel;
     }

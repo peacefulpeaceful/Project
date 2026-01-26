@@ -6,10 +6,12 @@ public class Parcel {
     private int id;
     private double weight;
     private ParcelStatus status;
+    private ParcelCategory category;
     private Client sender;
     private Client recipient;
     private LocalDateTime createdAt;
     private double cost;
+
 
 
     public Parcel() {;
@@ -25,6 +27,10 @@ public class Parcel {
 
     public ParcelStatus getStatus() {
         return status;
+    }
+
+    public ParcelCategory getCategory() {
+        return category;
     }
 
     public Client getSender() {
@@ -46,6 +52,10 @@ public class Parcel {
 
     public void setStatus(ParcelStatus status) {
         this.status = status;
+    }
+
+    public void setCategory(ParcelCategory category) {
+        this.category = category;
     }
 
     public void setSender(Client sender) {
@@ -76,6 +86,7 @@ public class Parcel {
         return "Parcel{id=" + id +
                 ", weight=" + weight +
                 ", status=" + status +
+                ", category=" + category +
                 ", cost=" + cost +
                 ", createdAt=" + createdAt +
                 "}";

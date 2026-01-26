@@ -5,7 +5,7 @@ import model.ParcelStatus;
 import java.util.List;
 
 public interface IParcelRepository {
-    void save(Parcel p);
+    void save(Parcel p, int senderId, int receiverId);
     List<Parcel> getAll();
     Parcel getById(int id);
     void updateStatus(int id, ParcelStatus status);
