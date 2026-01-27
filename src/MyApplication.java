@@ -1,11 +1,15 @@
 import controllers.interfaces.IParcelController;
 
+import model.Role;
+import.model.UserSession;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MyApplication {
     private final Scanner scanner = new Scanner(System.in);
     private final IParcelController controller;
+    private final UserSession session = UserSession.getInstance();
 
     public MyApplication(IParcelController controller) {
         this.controller = controller;
@@ -14,14 +18,19 @@ public class MyApplication {
     private void mainMenu() {
         System.out.println();
         System.out.println("Welcome to my post office app");
+        System.out.println("Current role: " + session.getCurrentRole());
         System.out.println("1. Create package");
         System.out.println("2. Show all packages");
-        System.out.println("3. Change status");
+        System.out.println("3. Show full parcel description");
+        System.out.println("4. Change status");
+        System.out.println("5. Show parcels by category");
+        System.out.println("6 Change role");
         System.out.println("0. Exit");
-        System.out.print("Enter option (0-3): ");
+        System.out.print("Enter option (0-6): ");
     }
 
     public void start() {
+        loginMenu();
         while (true) {
             mainMenu();
             try {
@@ -30,7 +39,10 @@ public class MyApplication {
                 switch (option) {
                     case 1 -> createParcelMenu();
                     case 2 -> showAllMenu();
-                    case 3 -> changeStatusMenu();
+                    case 3 -> showFullDescriptionMenu();
+                    case 4 -> changeStatusMenu();
+                    case 5 -> showByCategoryMenu();
+                    case 6 -> loginMenu();
                     case 0 -> { System.out.println("Bye!"); return; }
                     default -> System.out.println("Wrong option!");
                 }
@@ -49,6 +61,8 @@ public class MyApplication {
     private void createParcelMenu() {
         System.out.println("Enter weight(kg):");
         double weight = scanner.nextDouble();
+        System.out.println("Enter category(REGULAR / EXPRESS): ");
+        String category = scanner.next();
 
         System.out.println("Sender name:");
         String sName = scanner.next();
@@ -62,7 +76,7 @@ public class MyApplication {
         System.out.println("Receiver address:");
         String rAddress = scanner.next();
 
-        String response = controller.createParcel(weight, sName, sSurname, sAddress, rName, rAddress);
+        String response = controller.createParcel(weight, category, sName, sSurname, sAddress, rName, rAddress);
         System.out.println(response);
     }
 
@@ -80,5 +94,26 @@ public class MyApplication {
 
         String response = controller.changeStatus(id, status);
         System.out.println(response);
+    }
+    private void showFullDescriptionMenu(){
+        System.out.println("Enter parcel id:");
+        int id = scanner.nextInt();
+        String responce = controller.getFullParcelDescription(id);
+        System.out.println(responce);
+
+    }
+
+
+    private void showByCategoryMenu(){
+        System.out.println("Enter category(REGULAR / EXPRESS): ");
+        String category = scanner.next();
+        String responce = controller.getParcelsByCategory(category);
+        System.out.println(responce);
+    }
+
+    private void loginMenu(){
+        System.out.println("Enter rol: (ADMIN / MANAGER / EDITOR): ");
+        String role = scanner.next();
+        session.login(Role.valueOf(role.toUpperCase()));
     }
 }
