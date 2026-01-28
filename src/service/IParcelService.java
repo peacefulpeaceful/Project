@@ -6,7 +6,7 @@ import model.ParcelCategory;
 import model.ParcelStatus;
 import java.util.List;
 
-public interface IParcelSerice {
+public interface IParcelService {
     Parcel createParcel(double weight, ParcelCategory category, Client sender, Client recipient);
     List<Parcel> getAllParcels();
     void changeStatus(int parcelId, ParcelStatus newStatus);

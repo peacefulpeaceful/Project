@@ -114,6 +114,8 @@ public class MyApplication {
     private void loginMenu(){
         System.out.println("Enter rol: (ADMIN / MANAGER / EDITOR): ");
         String role = scanner.next();
-        session.login(Role.valueOf(role.toUpperCase()));
+        System.out.println("Enter password: ");
+        String password = scanner.next();
+        session.login(Role.valueOf(role.toUpperCase()), password);
     }
 }
