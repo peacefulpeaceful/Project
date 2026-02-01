@@ -1,7 +1,7 @@
 package security;
 
 public enum Role {
-    USER,
+    ADMIN,
     MANAGER,
-    ADMIN
+    EDITOR
 }

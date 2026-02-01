@@ -13,8 +13,9 @@ public class ClientRepository implements IClientRepository{
     public ClientRepository(IDB db){
         this.db = db;
     }
+
     @Override
-    public int save(Client client) throws Exception{
+    public int save(Client client)throws Exception {
         String sql = "INSERT INTO client(name, surname, adress)"
         + "VALUES (?, ?, ?)";
 
@@ -35,6 +36,6 @@ public class ClientRepository implements IClientRepository{
         } catch(Exception e){
             throw new RuntimeException("DB error: " + e.getMessage());
     }
-        throw new RuntimeException("Client not saved")
+        throw new RuntimeException("Client not saved");
     }
 }

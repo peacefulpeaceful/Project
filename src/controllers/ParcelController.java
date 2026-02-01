@@ -1,13 +1,13 @@
 package controllers;
 
-import controllers.interfaces.IParcelController;
+import interfaces.IParcelController;
 import model.Client;
 import model.Parcel;
 import model.ParcelCategory;
 import model.ParcelStatus;
-import model.Role;
-import model.RoleGuard;
-import model.UserSession;
+import security.Role;
+import security.RoleGuard;
+import security.UserSession;
 import service.ParcelService;
 
 
@@ -26,11 +26,11 @@ public class ParcelController implements IParcelController {
 
     @Override
     public String createParcel(double weight,
-                               String category;
+                               String category,
                                String senderName, String senderSurname, String senderAddress,
                                String receiverName, String receiverAddress) {
         try {
-            RoleGuard.requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER, Role.EDITOR);
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER, Role.EDITOR);
             ParcelCategory parcelCategory = ParcelCategory.valueOf(category.toUpperCase());
 
             Client sender = new Client();
@@ -65,7 +65,7 @@ public class ParcelController implements IParcelController {
     @Override
     public String getParcelsByCategory(String category) {
         try {
-            RoleGuard.requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER, Role.EDITOR);
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER, Role.EDITOR);
             ParcelCategory parcelCategory = ParcelCategory.valueOf(category.toUpperCase());
             List<Parcel> list = service.getParcelsByCategory(parcelCategory);
             if (list.isEmpty()) return "No parcels in this categoyr";
@@ -81,7 +81,7 @@ public class ParcelController implements IParcelController {
     @Override
     public String getFullParcelDescription(int id) {
         try {
-            RoleGuard.requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER);
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER);
             Parcel parcel = service.getFullParcelById(id);
             if (parcel == null) return "Parcel not found";
             return parcel.getFullParcelDescription();
@@ -94,7 +94,7 @@ public class ParcelController implements IParcelController {
     @Override
     public String changeStatus(int id, String newStatus) {
         try {
-            RoleGuard.requireAny(session.getCurrentrole(), Role.ADMIN, Role.MANAGER)
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER);
             ParcelStatus status = ParcelStatus.valueOf(newStatus.toUpperCase());
             service.changeStatus(id, status);
             return "Status updated in DB for id=" + id + " to " + status;

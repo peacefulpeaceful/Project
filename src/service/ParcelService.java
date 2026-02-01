@@ -29,11 +29,16 @@ public class ParcelService implements IParcelService {
         valService.validateClient(sender);
         valService.validateClient(recipient);
 
-        int senderId = clientRepo.save(sender);
-        int receiverId = clientRepo.save(recipient);
+        int senderId;
+        int receiverId;
+        try{
+            senderId = clientRepo.save(sender);
+            receiverId = clientRepo.save(recipient);
+        }catch (Exception e){
+            throw new RuntimeException("Client save failed " + e.getMessage());
+        }
 
-        double cost = calculateCost(weight);
-
+        double cost = calculateCost(weight, category);
         Parcel parcel = new Parcel.Builder(weight, category, sender, recipient)
                 .withCost(cost)
                 .withStatus(ParcelStatus.CREATED)
@@ -89,4 +94,5 @@ public double calculateCost(double weight, ParcelCategory category){
     }
     return base;
 }
+
 }

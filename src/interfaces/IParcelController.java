@@ -1,4 +1,4 @@
-package controllers.interfaces;
+package interfaces;
 
 public interface IParcelController {
     String createParcel(double weight,

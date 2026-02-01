@@ -1,7 +1,8 @@
 import controllers.ParcelController;
-import controllers.interfaces.IParcelController;
+import interfaces.IParcelController;
 import data.IDB;
 import data.PostgresDB;
+import repository.ClientRepository;
 import repository.ParcelRepository;
 import service.ParcelService;
 
@@ -19,7 +20,8 @@ public class Main {
         );
 
         ParcelRepository repo = new ParcelRepository(db);
-        ParcelService service = new ParcelService(repo);
+        ClientRepository clientRepo = new ClientRepository(db);
+        ParcelService service = new ParcelService(repo, clientRepo);
         IParcelController controller = new ParcelController(service);
 
         MyApplication app = new MyApplication(controller);

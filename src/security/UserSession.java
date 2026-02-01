@@ -1,6 +1,6 @@
 package security;
 
-import model.Role;
+import security.Role;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -12,12 +12,12 @@ public class UserSession implements  IUserSession{
 
     private UserSession(){
         rolePasswords.put(Role.ADMIN, "ULTRA_GOD_PASSWORD");
-        rolePassword.put(Role.MANAGER, "676767");
-        rolePassword.put(Role.EDITOR, "notEDITOR");
+        rolePasswords.put(Role.MANAGER, "676767");
+        rolePasswords.put(Role.EDITOR, "notEDITOR");
 
     }
 
-    private static class UserSessionHolder{
+    private static class UserSessionHolder {
         private static final UserSession INSTANCE = new UserSession();
     }
 

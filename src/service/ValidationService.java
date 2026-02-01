@@ -6,7 +6,7 @@ import model.ParcelCategory;
 public class ValidationService implements IValidationService{
     public void validateWeight(double weight){
         if (weight <= 0){
-            throw new IllegalArgumentException("Weigth must be > 0")
+            throw new IllegalArgumentException("Weigth must be > 0");
         }
         if (weight > 30){
             throw new IllegalArgumentException("Weight need to be no more than 30kg");
@@ -27,7 +27,7 @@ public class ValidationService implements IValidationService{
 
     public void validateCategory(ParcelCategory category){
         if(category == null){
-            throw new IllegalArgumentException("Category is required")
+            throw new IllegalArgumentException("Category is required");
         }
     }
 

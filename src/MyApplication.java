@@ -1,7 +1,7 @@
-import controllers.interfaces.IParcelController;
+import interfaces.IParcelController;
 
-import model.Role;
-import.model.UserSession;
+import security.Role;
+import security.UserSession;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

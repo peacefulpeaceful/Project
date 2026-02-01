@@ -12,12 +12,10 @@ public class Parcel {
     private LocalDateTime createdAt;
     private double cost;
 
-
-
-    public Parcel() {;
+    public Parcel() {
     }
 
-    private Parcel(Builder builder){
+    private Parcel(Builder builder) {
         this.weight = builder.weight;
         this.status = builder.status;
         this.category = builder.category;
@@ -51,7 +49,6 @@ public class Parcel {
         return recipient;
     }
 
-
     public void setId(int id) {
         this.id = id;
     }
@@ -76,22 +73,23 @@ public class Parcel {
         this.recipient = recipient;
     }
 
-    public double getCost(){
+    public double getCost() {
         return cost;
     }
-    public void setCost(double cost){
+
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
-    public LocalDateTime getCreatedAt(){
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt){
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public static class Builder{
+    public static class Builder {
         private final double weight;
         private final ParcelCategory category;
         private final Client sender;
@@ -100,16 +98,18 @@ public class Parcel {
         private LocalDateTime createdAt;
         private double cost;
 
-        public Builder(double weight, Parcel category, Client sender, Client recipient){
+        public Builder(double weight, ParcelCategory category, Client sender, Client recipient) {
             this.weight = weight;
             this.category = category;
             this.sender = sender;
             this.recipient = recipient;
         }
-        public Builder withStatus(ParcelStatus status){
+
+        public Builder withStatus(ParcelStatus status) {
             this.status = status;
             return this;
         }
+
         public Builder withCreatedAt(LocalDateTime createdAt) {
             this.createdAt = createdAt;
             return this;
@@ -123,24 +123,21 @@ public class Parcel {
         public Parcel build() {
             return new Parcel(this);
         }
-
-        public String getFullParcelDescription() {
-            String senderInfo = sender == null ? "N/A" : sender.toString();
-            String recipientInfo = recipient == null ? "N/A" : recipient.toString();
-            return "Parcel{id=" + id +
-                    ", weight=" + weight +
-                    ", status=" + status +
-                    ", category=" + category +
-                    ", cost=" + cost +
-                    ", createdAt=" + createdAt +
-                    ", sender=" + senderInfo +
-                    ", recipient=" + recipientInfo +
-                    "}";
-        }
-
     }
 
-
+    public String getFullParcelDescription() {
+        String senderInfo = sender == null ? "N/A" : sender.toString();
+        String recipientInfo = recipient == null ? "N/A" : recipient.toString();
+        return "Parcel{id=" + id +
+                ", weight=" + weight +
+                ", status=" + status +
+                ", category=" + category +
+                ", cost=" + cost +
+                ", createdAt=" + createdAt +
+                ", sender=" + senderInfo +
+                ", recipient=" + recipientInfo +
+                "}";
+    }
 
     @Override
     public String toString() {

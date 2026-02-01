@@ -3,6 +3,7 @@ package repository;
 import data.IDB;
 import model.Client;
 import model.Parcel;
+import model.ParcelCategory;
 import model.ParcelStatus;
 
 import java.sql.Connection;
@@ -21,7 +22,7 @@ public class ParcelRepository implements IParcelRepository{
     }
     @Override
     public void save(Parcel p, int senderId, int receiverId) {
-        String sql = "INSERT INTO posilka(type, weight,cost, sender_id, receiver_id, status) " +
+        String sql = "INSERT INTO posilka(type, weight, cost, sender_id, receiver_id, status) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection con = db.getConnection();
@@ -50,93 +51,109 @@ public class ParcelRepository implements IParcelRepository{
     }
 
     @Override
-    public List<Parcel> getAll() {
+    public List<Parcel> getAll(){
         List<Parcel> parcels = new ArrayList<>();
-        String sql =  "SELECT p.id, p.type, p.weight, p.cost, p.status, p.created_at, " +
-                        "       s.id AS sender_id, s.name AS sender_name, s.surname AS sender_surname, s.adress AS sender_address, " +
-                        "       r.id AS receiver_id, r.name AS receiver_name, r.surname AS receiver_surname, r.adress AS receiver_address " +
+        String sql = "SELECT p.id AS parcel_id, p.type AS parcel_type, p.weight AS parcel_weight, " +
+                "p.cost AS parcel_cost, p.status AS parcel_status, p.created_at AS parcel_created_at, " +
+                "s.id AS sender_id, s.name AS sender_name, s.surname AS sender_surname, s.adress AS sender_adress, " +
+                "r.id AS receiver_id, r.name AS receiver_name, r.surname AS receiver_surname, r.adress AS receiver_adress " +
+                "FROM posilka p " +
+                "JOIN client s ON p.sender_id = s.id " +
+                "JOIN client r ON p.receiver_id = r.id " +
+                "ORDER BY p.id";
+
+
+        try(Connection con = db.getConnection();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet rs = st.executeQuery()){
+            while (rs.next()){
+                parcels.add(mapRow(rs));
+            }
+            return parcels;
+        }catch (Exception e){
+            throw new RuntimeException("DB error: " + e.getMessage());
+        }
+    }
+
+    @Override
+            public Parcel getById(int id) {
+                String sql =  "SELECT p.id AS parcel_id, p.type AS parcel_type, p.weight AS parcel_weight, " +
+                        "       p.cost AS parcel_cost, p.status AS parcel_status, p.created_at AS parcel_created_at, " +
+                        "       s.id AS sender_id, s.name AS sender_name, s.surname AS sender_surname, s.adress AS sender_adress, " +
+                        "       r.id AS receiver_id, r.name AS receiver_name, r.surname AS receiver_surname, r.adress AS receiver_adress " +
                         "FROM posilka p " +
                         "JOIN client s ON p.sender_id = s.id " +
                         "JOIN client r ON p.receiver_id = r.id " +
-                        "ORDER BY p.id";
+                        "WHERE p.id = ?";
+
 
         try (Connection con = db.getConnection();
-             PreparedStatement st = con.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+                     PreparedStatement st = con.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                parcels.add(mapRow(rs));
-            }
+                    st.setInt(1, id);
 
-            return parcels;
+                    try (ResultSet rs = st.executeQuery()) {
+                        if (rs.next()) {
+                            return mapRow(rs);
+                        }
+                    }
 
-        } catch (Exception e) {
-            throw new RuntimeException("DB error: " + e.getMessage());
-        }
-    }
+                    return null;
 
-    @Override
-    public Parcel getById(int id) {
-        String sql = "SELECT * FROM posilka WHERE id = ?";
-
-        try (Connection con = db.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
-
-            st.setInt(1, id);
-
-            try (ResultSet rs = st.executeQuery()) {
-                if (rs.next()) {
-                    return mapRow(rs);
+                } catch (Exception e) {
+                    throw new RuntimeException("DB error: " + e.getMessage());
                 }
             }
 
-            return null;
-
-        } catch (Exception e) {
-            throw new RuntimeException("DB error: " + e.getMessage());
+        @Override
+        public Parcel getFullById(int id) {
+                return getById(id);
         }
-    }
 
-    @Override
-    public void updateStatus(int id, ParcelStatus status) {
-        String sql = "UPDATE posilka SET status = ? WHERE id = ?";
+        @Override
+        public void updateStatus(int id, ParcelStatus status) {
+            String sql = "UPDATE posilka SET status = ? WHERE id = ?";
 
-        try (Connection con = db.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+                try (Connection con = db.getConnection();
+                     PreparedStatement st = con.prepareStatement(sql)) {
 
-            st.setString(1, status.name());
-            st.setInt(2, id);
-            st.executeUpdate();
+                    st.setString(1, status.name());
+                    st.setInt(2, id);
+                    st.executeUpdate();
 
-        } catch (Exception e) {
-            throw new RuntimeException("DB error: " + e.getMessage());
+                } catch (Exception e) {
+                    throw new RuntimeException("DB error: " + e.getMessage());
+                }
+            }
+
+
+            private Parcel mapRow(ResultSet rs) throws Exception {
+                Parcel p = new Parcel();
+
+                p.setId(rs.getInt("parcel_id"));
+                p.setWeight(rs.getDouble("parcel_weight"));
+                p.setCost(rs.getDouble("parcel_cost"));
+                p.setStatus(ParcelStatus.valueOf(rs.getString("parcel_status")));
+                p.setCategory(ParcelCategory.valueOf(rs.getString("parcel_type")));
+                p.setCreatedAt(rs.getTimestamp("parcel_created_at").toLocalDateTime());
+
+                Client sender = new Client();
+                sender.setId(rs.getInt("sender_id"));
+                sender.setName(rs.getString("sender_name"));
+                sender.setSurname(rs.getString("sender_surname"));
+                sender.setAddress(rs.getString("sender_adress"));
+
+                Client receiver = new Client();
+                receiver.setId(rs.getInt("receiver_id"));
+                receiver.setName(rs.getString("receiver_name"));
+                receiver.setSurname(rs.getString("receiver_surname"));
+                receiver.setAddress(rs.getString("receiver_adress"));
+
+
+                p.setSender(sender);
+                p.setRecipient(receiver);
+
+
+                return p;
+            }
         }
-    }
-
-
-    private Parcel mapRow(ResultSet rs) throws Exception {
-        Parcel p = new Parcel();
-
-        p.setId(rs.getInt("id"));
-        p.setWeight(rs.getDouble("weight"));
-        p.setCost(rs.getDouble("cost"));
-        p.setStatus(ParcelStatus.valueOf(rs.getString("status")));
-        p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-
-        Client sender = new Client();
-        sender.setName(rs.getString("sender_name"));
-        sender.setSurname(rs.getString("sender_surname"));
-        sender.setAddress(rs.getString("sender_adress"));
-
-        Client receiver = new Client();
-        receiver.setName(rs.getString("receiver_name"));
-        receiver.setSurname(rs.getString("receiver_surname"));
-        receiver.setAddress(rs.getString("receiver_adress"));
-
-        p.setSender(sender);
-        p.setRecipient(receiver);
-
-
-        return p;
-    }
-}
