@@ -20,7 +20,7 @@ public class ParcelController implements IParcelController {
 
     public ParcelController(ParcelService service) {
         this.service = service;
-        this.session = session;
+        this.session = UserSession.getInstance();
     }
 
 

@@ -3,7 +3,7 @@ package service;
 import model.Client;
 import model.ParcelCategory;
 
-public class ValidationService {
+public class ValidationService implements IValidationService{
     public void validateWeight(double weight){
         if (weight <= 0){
             throw new IllegalArgumentException("Weigth must be > 0")

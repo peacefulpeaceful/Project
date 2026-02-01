@@ -7,19 +7,19 @@ import model.ParcelStatus;
 import repository.ClientRepository;
 import repository.ParcelRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ParcelService implements IParcelService {
 
     private final ParcelRepository repo;
     private final ClientRepository clientRepo;
-    private final ParcelFactory factory = new ParcelFactory();
     private final ValidationService valService = new ValidationService();
 
-    public ParcelService(ParcelRepository repo, ClientRepository clientRepo, ValidationService valService) {
+    public ParcelService(ParcelRepository repo, ClientRepository clientRepo) {
         this.repo = repo;
         this.clientRepo = clientRepo;
-        this.valService = valService;
+
     }
 
     @Override
@@ -34,7 +34,12 @@ public class ParcelService implements IParcelService {
 
         double cost = calculateCost(weight);
 
-        Parcel parcel = factory.create(weight, category, sender, recipient, cost);
+        Parcel parcel = new Parcel.Builder(weight, category, sender, recipient)
+                .withCost(cost)
+                .withStatus(ParcelStatus.CREATED)
+                .withCreatedAt(LocalDateTime.now())
+                .build();
+
 
         repo.save(parcel,senderId,receiverId);
 
@@ -48,7 +53,7 @@ public List<Parcel> getAllParcels() {
 }
 
 @Override
-public List<Parcel> getParcelByCategory(ParcelCategory category){
+public List<Parcel> getParcelsByCategory(ParcelCategory category){
         return repo.getAll().stream()
                 .filter(parcel -> parcel.getCategory() == category)
                 .toList();

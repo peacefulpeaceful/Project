@@ -2,24 +2,27 @@ package security;
 
 import model.Role;
 
-import java.util.List;
+import java.util.EnumMap;
 import java.util.Map;
 
-public class UserSession {
-    private final static UserSession INSTANCE = new UserSession();
+public class UserSession implements  IUserSession{
 
     private Role currentRole = Role.EDITOR;
-    private final Map<Role, String> rolePasswords = new EnumMap<Role.class>;
+    private final Map<Role, String> rolePasswords = new EnumMap<>(Role.class);
 
     private UserSession(){
-        rolePasswords.put(Role.ADMIN, "YA_100%_NE_ADMIN");
+        rolePasswords.put(Role.ADMIN, "ULTRA_GOD_PASSWORD");
         rolePassword.put(Role.MANAGER, "676767");
-        rolePassword.put(Role.EDITOR, "KAVABANGA");
-
+        rolePassword.put(Role.EDITOR, "notEDITOR");
 
     }
+
+    private static class UserSessionHolder{
+        private static final UserSession INSTANCE = new UserSession();
+    }
+
     public static UserSession getInstance(){
-        return INSTANCE;
+        return UserSessionHolder.INSTANCE;
     }
 
     public Role getCurrentRole(){
@@ -35,5 +38,4 @@ public class UserSession {
         }
         this.currentRole = role;
     }
-
 }
