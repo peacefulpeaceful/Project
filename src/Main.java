@@ -4,7 +4,9 @@ import data.IDB;
 import data.PostgresDB;
 import repository.ClientRepository;
 import repository.ParcelRepository;
+import service.IValidationService;
 import service.ParcelService;
+import service.ValidationService;
 
 
 public class Main {
@@ -21,7 +23,8 @@ public class Main {
 
         ParcelRepository repo = new ParcelRepository(db);
         ClientRepository clientRepo = new ClientRepository(db);
-        ParcelService service = new ParcelService(repo, clientRepo);
+        IValidationService validation = new ValidationService();
+        ParcelService service = new ParcelService(repo, clientRepo, validation);
         IParcelController controller = new ParcelController(service);
 
         MyApplication app = new MyApplication(controller);

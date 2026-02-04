@@ -112,7 +112,7 @@ public class MyApplication {
     }
 
     private void loginMenu(){
-        System.out.println("Enter rol: (ADMIN / MANAGER / EDITOR): ");
+        System.out.println("Enter role: (ADMIN / MANAGER / EDITOR): ");
         String role = scanner.next();
         System.out.println("Enter password: ");
         String password = scanner.next();

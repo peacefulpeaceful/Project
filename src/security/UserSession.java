@@ -1,7 +1,5 @@
 package security;
 
-import security.Role;
-
 import java.util.EnumMap;
 import java.util.Map;
 

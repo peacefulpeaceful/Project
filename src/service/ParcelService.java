@@ -14,12 +14,12 @@ public class ParcelService implements IParcelService {
 
     private final ParcelRepository repo;
     private final ClientRepository clientRepo;
-    private final ValidationService valService = new ValidationService();
+    private final IValidationService valService;
 
-    public ParcelService(ParcelRepository repo, ClientRepository clientRepo) {
+    public ParcelService(ParcelRepository repo, ClientRepository clientRepo, IValidationService valService) {
         this.repo = repo;
         this.clientRepo = clientRepo;
-
+        this.valService = valService;
     }
 
     @Override
