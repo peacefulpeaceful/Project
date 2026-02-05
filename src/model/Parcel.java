@@ -41,13 +41,8 @@ public class Parcel {
         return category;
     }
 
-    public Client getSender() {
-        return sender;
-    }
 
-    public Client getRecipient() {
-        return recipient;
-    }
+
 
     public void setId(int id) {
         this.id = id;
@@ -81,9 +76,6 @@ public class Parcel {
         this.cost = cost;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
