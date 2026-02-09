@@ -12,4 +12,13 @@ public interface IParcelController {
     String getFullParcelDescription(int id);
 
     String changeStatus(int id, String newStatus);
+    String cancelParcel(int id);
+
+    String findParcelsByPerson(String name, String surname);
+
+    String getClientHistory(String name, String surname);
+
+    String getDeliveredRevenue();
+
+    String addClientToBlacklist(String name, String surname, String reason);
 }
