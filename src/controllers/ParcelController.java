@@ -102,4 +102,69 @@ public class ParcelController implements IParcelController {
             return "Error: " + e.getMessage();
         }
     }
+    @Override
+    public String cancelParcel(int id) {
+        try {
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER);
+            service.cancelParcel(id);
+            return "Parcel cancelled for id=" + id;
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String findParcelsByPerson(String name, String surname) {
+        try {
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER, Role.EDITOR);
+            List<Parcel> list = service.getParcelsByPerson(name, surname);
+            if (list.isEmpty()) return "No parcels for this person.";
+
+            StringBuilder sb = new StringBuilder();
+            for (Parcel p : list) sb.append(p).append("\n");
+            return sb.toString();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String getClientHistory(String name, String surname) {
+        try {
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER, Role.EDITOR);
+            List<Parcel> sent = service.getParcelsSentBy(name, surname);
+            List<Parcel> received = service.getParcelsReceivedBy(name, surname);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Sent parcels:\n");
+            for (Parcel p : sent) sb.append(p).append("\n");
+            sb.append("Received parcels:\n");
+            for (Parcel p : received) sb.append(p).append("\n");
+            return sb.toString();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String getDeliveredRevenue() {
+        try {
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER);
+            double revenue = service.getDeliveredRevenue();
+            return "Total delivered revenue: " + revenue;
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String addClientToBlacklist(String name, String surname, String reason) {
+        try {
+            RoleGuard.getInstance().requireAny(session.getCurrentRole(), Role.ADMIN, Role.MANAGER);
+            service.addClientToBlacklist(name, surname, reason);
+            return "Client added to blacklist.";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
 }

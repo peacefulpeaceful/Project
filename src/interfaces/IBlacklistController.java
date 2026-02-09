@@ -1,6 +1,6 @@
 package interfaces;
 
 public interface IBlacklistController {
-    String addClientToBlackList(String name, String surname, String reason);
-    String isClientBlackListed(String name, String surname);
+    String addClientToBlacklist(String name, String surname, String reason);
+    String isClientBlacklisted(String name, String surname);
 }

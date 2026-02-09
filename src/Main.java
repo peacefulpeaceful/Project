@@ -1,12 +1,17 @@
+import controllers.BlacklistController;
 import controllers.ParcelController;
 import interfaces.IParcelController;
 import data.IDB;
 import data.PostgresDB;
+import repository.BlacklistRepository;
 import repository.ClientRepository;
 import repository.ParcelRepository;
-import service.IValidationService;
+import repository.UserRepository;
+import service.AuthService;
+import service.BlacklistService;
+import service.IBlacklistService;
 import service.ParcelService;
-import service.ValidationService;
+
 
 
 public class Main {
@@ -23,13 +28,18 @@ public class Main {
 
         ParcelRepository repo = new ParcelRepository(db);
         ClientRepository clientRepo = new ClientRepository(db);
-        IValidationService validation = new ValidationService();
-        ParcelService service = new ParcelService(repo, clientRepo, validation);
+        BlacklistRepository blacklistRepository = new BlacklistRepository(db);
+        IBlacklistService blacklistService = new BlacklistService(blacklistRepository);
+        ParcelService service = new ParcelService(repo, clientRepo, blacklistService);
         IParcelController controller = new ParcelController(service);
+        BlacklistController blacklistController = new BlacklistController(blacklistService, clientRepo);
 
-        MyApplication app = new MyApplication(controller);
+        UserRepository userRepository = new UserRepository(db);
+        AuthService authService = new AuthService(userRepository);
+        MyApplication app = new MyApplication(controller, blacklistController, authService);
         app.start();
 
         db.close();
     }
 }
+

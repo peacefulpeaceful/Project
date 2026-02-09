@@ -10,5 +10,6 @@ public interface IParcelRepository {
     Parcel getById(int id);
     Parcel getFullById(int id);
     void updateStatus(int id, ParcelStatus status);
+    double getDeliveredRevenue();
 
 }

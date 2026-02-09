@@ -19,3 +19,4 @@ public interface IParcelService {
     double getDeliveredRevenue();
     void addClientToBlacklist(String name, String surname, String reason);
 }
+
