@@ -1,7 +1,7 @@
+import interfaces.IBlacklistController;
 import interfaces.IParcelController;
-
-import security.Role;
 import security.UserSession;
+import service.IAuthService;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -9,26 +9,33 @@ import java.util.Scanner;
 public class MyApplication {
     private final Scanner scanner = new Scanner(System.in);
     private final IParcelController controller;
+    private final IBlacklistController blacklistController;
     private final UserSession session = UserSession.getInstance();
-
-    public MyApplication(IParcelController controller) {
+    private final IAuthService authService;
+    public MyApplication(IParcelController controller, IBlacklistController blacklistController, IAuthService authService) {
         this.controller = controller;
+        this.blacklistController = blacklistController;
+        this.authService = authService;
     }
-
     private void mainMenu() {
         System.out.println();
         System.out.println("Welcome to my post office app");
         System.out.println("Current role: " + session.getCurrentRole());
         System.out.println("1. Create package");
         System.out.println("2. Show all packages");
+        System.out.println("3. Change status");
         System.out.println("3. Show full parcel description");
         System.out.println("4. Change status");
-        System.out.println("5. Show parcels by category");
-        System.out.println("6 Change role");
+        System.out.println("5. Cancel parcel");
+        System.out.println("6. Show parcels by category");
+        System.out.println("7. Find parcels by person");
+        System.out.println("8. Client history");
+        System.out.println("9. Total delivered revenue");
+        System.out.println("10. Add client to blacklist");
+        System.out.println("11. Change account");
         System.out.println("0. Exit");
-        System.out.print("Enter option (0-6): ");
+        System.out.print("Enter option (0-11): ");
     }
-
     public void start() {
         loginMenu();
         while (true) {
@@ -41,8 +48,13 @@ public class MyApplication {
                     case 2 -> showAllMenu();
                     case 3 -> showFullDescriptionMenu();
                     case 4 -> changeStatusMenu();
-                    case 5 -> showByCategoryMenu();
-                    case 6 -> loginMenu();
+                    case 5 -> cancelParcelMenu();
+                    case 6 -> showByCategoryMenu();
+                    case 7 -> findParcelsByPersonMenu();
+                    case 8 -> clientHistoryMenu();
+                    case 9 -> showRevenueMenu();
+                    case 10 -> addToBlacklistMenu();
+                    case 11 -> loginMenu();
                     case 0 -> { System.out.println("Bye!"); return; }
                     default -> System.out.println("Wrong option!");
                 }
@@ -61,7 +73,8 @@ public class MyApplication {
     private void createParcelMenu() {
         System.out.println("Enter weight(kg):");
         double weight = scanner.nextDouble();
-        System.out.println("Enter category(REGULAR / EXPRESS): ");
+
+        System.out.println("Enter category (REGULAR / EXPRESS):");
         String category = scanner.next();
 
         System.out.println("Sender name:");
@@ -75,7 +88,6 @@ public class MyApplication {
         String rName = scanner.next();
         System.out.println("Receiver address:");
         String rAddress = scanner.next();
-
         String response = controller.createParcel(weight, category, sName, sSurname, sAddress, rName, rAddress);
         System.out.println(response);
     }
@@ -95,27 +107,67 @@ public class MyApplication {
         String response = controller.changeStatus(id, status);
         System.out.println(response);
     }
-    private void showFullDescriptionMenu(){
+    private void showFullDescriptionMenu() {
         System.out.println("Enter parcel id:");
         int id = scanner.nextInt();
-        String responce = controller.getFullParcelDescription(id);
-        System.out.println(responce);
-
+        String response = controller.getFullParcelDescription(id);
+        System.out.println(response);
     }
 
-
-    private void showByCategoryMenu(){
-        System.out.println("Enter category(REGULAR / EXPRESS): ");
+    private void showByCategoryMenu() {
+        System.out.println("Enter category (REGULAR / EXPRESS):");
         String category = scanner.next();
-        String responce = controller.getParcelsByCategory(category);
-        System.out.println(responce);
+        String response = controller.getParcelsByCategory(category);
+        System.out.println(response);
     }
 
-    private void loginMenu(){
-        System.out.println("Enter role: (ADMIN / MANAGER / EDITOR): ");
-        String role = scanner.next();
-        System.out.println("Enter password: ");
+    private void loginMenu() {
+        System.out.println("Enter username:");
+        String username = scanner.next();
+        System.out.println("Enter password:");
         String password = scanner.next();
-        session.login(Role.valueOf(role.toUpperCase()), password);
+        authService.login(username, password);
+        System.out.println("Logged in as: " + session.getCurrentRole());
+    }
+
+    private void cancelParcelMenu() {
+        System.out.println("Enter parcel id:");
+        int id = scanner.nextInt();
+        String response = controller.cancelParcel(id);
+        System.out.println(response);
+    }
+
+    private void findParcelsByPersonMenu() {
+        System.out.println("Enter person name:");
+        String name = scanner.next();
+        System.out.println("Enter person surname:");
+        String surname = scanner.next();
+        String response = controller.findParcelsByPerson(name, surname);
+        System.out.println(response);
+    }
+
+    private void clientHistoryMenu() {
+        System.out.println("Enter person name:");
+        String name = scanner.next();
+        System.out.println("Enter person surname:");
+        String surname = scanner.next();
+        String response = controller.getClientHistory(name, surname);
+        System.out.println(response);
+    }
+
+    private void showRevenueMenu() {
+        String response = controller.getDeliveredRevenue();
+        System.out.println(response);
+    }
+
+    private void addToBlacklistMenu() {
+        System.out.println("Enter person name:");
+        String name = scanner.next();
+        System.out.println("Enter person surname:");
+        String surname = scanner.next();
+        System.out.println("Enter reason:");
+        String reason = scanner.next();
+        String response = blacklistController.addClientToBlacklist(name, surname, reason);
+        System.out.println(response);
     }
 }
